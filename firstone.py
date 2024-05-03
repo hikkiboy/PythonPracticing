@@ -1,7 +1,12 @@
-nome = input("digite seu nome: ").capitalize()
-print(f"omg {nome}, hiiiiiiiiii")
-ano_nascimento = int(input("quando vc nasceu bestie? "))
-idade = 2024 - ano_nascimento
-print(f"waow vc tem grandes {idade} anos !!")
+import socket
+
+lista_portas = [80,123,124,124,125,5,754,765,8769,976,86,87]
 
 
+for porta in lista_portas:
+
+    client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    client.connect(('bancocn.com', porta))
+    client.send(b"oi mundo")
+    resposta = client.recv(1024)
+    print(resposta.decode())

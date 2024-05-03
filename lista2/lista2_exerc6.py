@@ -10,6 +10,3 @@ elif(idade >= 14 and idade <= 17):
     print("grupo jovem B")
 else:
     print("adulto")
-
-
-
