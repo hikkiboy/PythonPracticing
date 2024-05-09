@@ -10,12 +10,12 @@ class Conta():
     else:
       print("Ja ativou")
   def Debito(self,valor):
-    if self.Ativo == True and self.Saldo - valor >= 0:
+    if self.Ativo == True and self.Saldo - valor >= 0 and valor > 0:
       self.Saldo = self.Saldo - valor
     else:
       print("nao")
   def Credito(self,valor):
-    if self.Ativo == True :
+    if self.Ativo == True and valor > 0 :
       self.Saldo = self.Saldo + valor
 
 
@@ -34,7 +34,7 @@ class Corrente(Conta):
     super().__init__(numero,cpf,saldo,ativo)
     self.NTalao = nTalao
   def Talao(self):
-    if self.nTalao > 0:
+    if self.NTalao > 0:
         self.Saldo = self.Saldo - 30
     else:
        print("vc nao tem")
