@@ -1,3 +1,8 @@
+import pymysql
+
+
+
+
 class Conta():
   def __init__(self,numero,cpf,saldo,ativo):
     self.Numero = numero
@@ -12,6 +17,7 @@ class Conta():
   def Debito(self,valor):
     if self.Ativo == True and self.Saldo - valor >= 0 and valor > 0:
       self.Saldo = self.Saldo - valor
+     
     else:
       print("nao")
   def Credito(self,valor):
