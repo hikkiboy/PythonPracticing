@@ -11,6 +11,13 @@ conexao = pymysql.connect(
 )
 cursor = conexao.cursor()
 
+
+P1 = cs.Poupanca(None,None,None,None,None)
+C1 = cs.Corrente(None,None,None,None,None)
+E1 = cs.Especial(None,None,None,None,None)
+EM1 = cs.Empresa(None,None,None,None,None)
+ES1 = cs.Estudantil(None,None,None,None,None)
+
 sair = False
 
 def MainMenu():
@@ -26,128 +33,171 @@ def MainMenu():
 
 def SecondMenu(op):
     global sair
-    if(op == 1):
-        dianiver = int(input("Qual o seu aniversario ?: "))
-        nConta = random.randint(1,99999)
-        cpf = input("Qual o cpf manzinho ?: ")
-        conta = cs.Poupanca(dianiver,nConta,cpf,0,True)
-        dados = (nConta, cpf, 0, dianiver)
-        cursor.execute(f"INSERT INTO poupanca (numero, cpf,saldo,dia_aniversario) values({nConta},{cpf}, {conta.Saldo}, {dianiver})")
-        conexao.commit()
+    global P1
 
-        if dianiver > 0: 
+    wah = True
+
+
+    if(op == 1):
+
+            while wah:
+                if P1.Numero != None: 
+                    conta = P1
+                    for i in range(10):
+                        print(f"Saldo atual:{conta.Saldo} Dia aniversario : {conta.diaAniversario}, Numero da conta: {conta.Numero}")
+                        print("Movimentos: C para Credito D para Debito")
+                        
+                        wa = input("Digite: ")
+                        
+                        
+                        if(wa == "C"):
+                            C = int(input("digite o valor: "))
+                            conta.Credito(C)
+                            salso = (conta.Saldo, conta.Numero)
+                            cursor.execute("UPDATE poupanca SET saldo = %s where numero = %s",salso )
+                            conexao.commit()
+                            i = i - 1 
+
+
+                        elif(wa == "D"):
+                            D = int(input("Digite o valor: "))
+                            conta.Debito(D)
+                            salso = (conta.Saldo, conta.Numero)
+                            cursor.execute("UPDATE poupanca SET saldo = %s where numero = %s",salso )
+
+                            conexao.commit()
+                            i = i - 1
+
+                    dia = input("Que dia é hoje ?: ")
+                    if dia == conta.diaAniversario:
+                        conta.Correcao(dia)
+                    else:
+                        print('nah')
+                else:
+                    opof = input("não encontrei sua conta,  Quer tentar criar uma nova ? (C) ou tentar logar ? (L): ")
+                    if opof == "C":  
+                        dianiver = int(input("Qual o seu aniversario ?: "))
+                        nConta = random.randint(1,99999)
+                        cpf = input("Qual o cpf manzinho ?: ")
+                        conta = cs.Poupanca(dianiver,nConta,cpf,0,True)
+                        dados = (nConta, cpf, 0, dianiver)
+                        P1 = cs.Poupanca(dianiver,nConta,cpf,0,True)
+                        cursor.execute(f"INSERT INTO poupanca (numero, cpf,saldo,dia_aniversario) values({nConta},{cpf}, {conta.Saldo}, {dianiver})")
+                        conexao.commit()
+                    elif opof == "L":
+                        opnum = input("Qual o numero da sua conta?: ")
+                        cursor.execute("select * from Poupanca where numero = %s limit 1",opnum)
+                        data = cursor.fetchall()
+                        if len(data) > 0:
+                            print("Achei sua conta!")
+                            P1 = cs.Poupanca(data[0][4],data[0][1],data[0][2],data[0][3],True)
+                            wah = True
+                        else:
+                            print("Não achei")
+    global C1
+    while wah:
+        if(op == 2):
+                if C1.Numero != None:
+                    conta = C1
+                    for i in range(10):
+                        print(f"Saldo atual:{conta.Saldo} Talões : {conta.NTalao} Numero : {conta.Numero}")
+                        print("Movimentos: C para Credito D para Debito")
+                        wa = input("Digite: ")
+                        if(wa == "C"):
+                                C = int(input("digite o valor: "))
+                                conta.Credito(C)
+                                salso = (conta.Saldo, nConta)
+                                cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
+                                conexao.commit()
+                                i = i - 1 
+                        elif(wa == "D"):
+                                D = int(input("Digite o valor: "))
+                                salso = (conta.Saldo, nConta)
+                                cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
+                                conexao.commit()
+                                conta.Debito(D)
+                                i = i - 1
+                        else:
+                                break
+                    dia = input("Você quer pegar um talão?: ")
+                    if dia == "S":
+                        conta.Talao()
+                        salso = (conta.Saldo, nConta)
+                        cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
+                        conexao.commit()
+                        print("Seu saldo final : {conta.Saldo}")
+                    else:
+                        print('nah')
+                else:
+                        opof = input("não encontrei sua conta,  Quer tentar criar uma nova ? (C) ou tentar logar ? (L): ")
+                        if opof == "C":  
+                            nConta = random.randint(1,99999)
+                            cpf = input("Qual o cpf manzinho ?: ")
+                            conta = cs.Corrente(nConta,cpf,0,True,3)
+                            dados = (nConta, cpf, 0)
+                            C1 = cs.Corrente(nConta,cpf,0,True,3)
+                            cursor.execute(f"INSERT INTO corrente (numero, cpf,saldo,ntalao) values({nConta},{cpf}, {conta.Saldo}, {conta.NTalao})")
+                            conexao.commit()
+                        elif opof == "L":
+                            opnum = input("Qual o numero da sua conta?: ")
+                            cursor.execute("select * from corrente where numero = %s limit 1",opnum)
+                            data = cursor.fetchall()
+                            if len(data) > 0:
+                                print("Achei sua conta!")
+                                C1 = cs.Corrente(data[0][4],data[0][1],data[0][2],data[0][3],True)
+                                wah = True
+                            else:
+                                print("Não achei")
+                
+
+
+    global E1
+    if(op == 3):
+        if E1.Numero != None:
+            conta = E1
             for i in range(10):
-                print(f"Saldo atual:{conta.Saldo} Dia aniversario : {conta.diaAniversario}")
+                print(f"Saldo atual:{conta.Saldo} Limite : {conta.Limite}")
                 print("Movimentos: C para Credito D para Debito")
-                
                 wa = input("Digite: ")
-                
-                
                 if(wa == "C"):
                     C = int(input("digite o valor: "))
                     conta.Credito(C)
-                    salso = (conta.Saldo, nConta)
-                    cursor.execute("UPDATE poupanca SET saldo = %s where numero = %s",salso )
+                    salso = (conta.Saldo, conta.Limite, nConta )
+                    cursor.execute("UPDATE especial SET saldo = %s, limite = %s where numero = %s",salso )
                     conexao.commit()
+
                     i = i - 1 
-
-
                 elif(wa == "D"):
                     D = int(input("Digite o valor: "))
                     conta.Debito(D)
-                    salso = (conta.Saldo, nConta)
-                    cursor.execute("UPDATE poupanca SET saldo = %s where numero = %s",salso )
-
+                    salso = (conta.Saldo, conta.Limite, nConta )
+                    cursor.execute("UPDATE especial SET saldo = %s, limite = %s where numero = %s",salso )
                     conexao.commit()
+
                     i = i - 1
-
-
+                else:
+                    sair = True
+                    break
+        else:
+            opof = input("não encontrei sua conta,  Quer tentar criar uma nova ? (C) ou tentar logar ? (L): ")
+            if opof == "C":  
+                nConta = random.randint(1,99999)
+                cpf = input("Qual o cpf manzinho ?: ")
+                conta = cs.Especial(1000,nConta,cpf,0,True)
+                cursor.execute(f"INSERT INTO especial (numero, cpf,saldo,limite) values({conta.Numero},{cpf}, {conta.Saldo}, {conta.Limite})")
+                conexao.commit()
+            elif opof == "L":
+                opnum = input("Qual o numero da sua conta?: ")
+                cursor.execute("select * from corrente where numero = %s limit 1",opnum)
+                data = cursor.fetchall()
+                if len(data) > 0:
+                    print("Achei sua conta!")
+                    P1 = cs.Poupanca(data[0][4],data[0][1],data[0][2],data[0][3],True)
+                    
+            else:
+                print("Não achei")
             
-            dia = input("Que dia é hoje ?: ")
-            if dia == dianiver:
-                conta.Correcao(dia)
-            else:
-                print('nah')
-        else:
-            print("digita um numero valido e tenta denovo")
-        
-
-    elif(op == 2):
-        conta = cs.Corrente(1,1,0,True,3)
-        nConta = random.randint(1,99999)
-        cpf = input("Qual o cpf manzinho ?: ")
-        conta = cs.Corrente(nConta,cpf,0,True, 3)
-        cursor.execute(f"INSERT INTO corrente (numero, cpf,saldo,nTalao) values({nConta},{cpf}, {conta.Saldo}, {conta.NTalao})")
-        conexao.commit()
-
-        
-        for i in range(10):
-            print(f"Saldo atual:{conta.Saldo} Talões : {conta.NTalao}")
-            print("Movimentos: C para Credito D para Debito")
-            wa = input("Digite: ")
-            if(wa == "C"):
-                C = int(input("digite o valor: "))
-                conta.Credito(C)
-                salso = (conta.Saldo, nConta)
-                cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
-                conexao.commit()
-
-
-                i = i - 1 
-            elif(wa == "D"):
-                D = int(input("Digite o valor: "))
-                salso = (conta.Saldo, nConta)
-                cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
-                conexao.commit()
-                conta.Debito(D)
-                i = i - 1
-            else:
-                break
-        dia = input("Você quer pegar um talão?: ")
-        if dia == "S":
-            conta.Talao()
-            salso = (conta.Saldo, nConta)
-            cursor.execute("UPDATE corrente SET saldo = %s where numero = %s",salso )
-            conexao.commit()
-            print("Seu saldo final : {conta.Saldo}")
-        else:
-            print('nah')
-
-
-    elif(op == 3):
-
-
-        nConta = random.randint(1,99999)
-        cpf = input("Qual o cpf manzinho ?: ")
-        conta = cs.Especial(1000,nConta,cpf,0,True)
-        cursor.execute(f"INSERT INTO especial (numero, cpf,saldo,limite) values({nConta},{cpf}, {conta.Saldo}, {conta.Limite})")
-        conexao.commit()
-
-
-        for i in range(10):
-            print(f"Saldo atual:{conta.Saldo} Limite : {conta.Limite}")
-            print("Movimentos: C para Credito D para Debito")
-            wa = input("Digite: ")
-            if(wa == "C"):
-                C = int(input("digite o valor: "))
-                conta.Credito(C)
-                salso = (conta.Saldo, conta.Limite, nConta )
-                cursor.execute("UPDATE especial SET saldo = %s, limite = %s where numero = %s",salso )
-                conexao.commit()
-
-                i = i - 1 
-            elif(wa == "D"):
-                D = int(input("Digite o valor: "))
-                conta.Debito(D)
-                salso = (conta.Saldo, conta.Limite, nConta )
-                cursor.execute("UPDATE especial SET saldo = %s, limite = %s where numero = %s",salso )
-                conexao.commit()
-
-                i = i - 1
-            else:
-                sair = True
-                break
-    elif( op == 4):
+    if( op == 4):
         nConta = random.randint(1,99999)
         cpf = input("Qual o cpf manzinho ?: ")
         conta = cs.Empresa(nConta,cpf,0,True, 10000)
@@ -191,7 +241,7 @@ def SecondMenu(op):
                     conexao.commit()
             else:
                 break
-    elif(op == 5):
+    if(op == 5):
         nConta = random.randint(1,99999)
         cpf = input("Qual o cpf manzinho ?: ")
         conta = cs.Estudantil(nConta,cpf,0,True, 5000)
@@ -232,7 +282,7 @@ def SecondMenu(op):
                     conexao.commit()
             else:
                 break
-    elif(op == 6):
+    if(op == 6):
         print("ta bom xau")
         
         sair = True
