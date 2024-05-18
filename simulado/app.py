@@ -12,8 +12,11 @@ con = pymysql.connect(
     host = 'localhost',
     user = 'root',
     password = 'fbradesco',
-    database = 'yabadaba'
+    database='eletronicosplus'
 )
+
+#create database : 
+#con.cursor().execute('CREATE DATABASE eletronicosplus ')
 
 with con:
     with con.cursor() as cursor:
@@ -105,12 +108,7 @@ with con:
                 con.commit()
 
             elif op == '5':
-                #Movimentos
-                print('- '* 20)
-                codigo = print('digite o codigo do produto a ser movimentado: ')
-                cursor.execute('SELECT * FROM PRODUTO WHERE CODIGO = %s',(codigo))
-                item= cursor.fetchall()
-                Produti_item = Produti(*item)
-                print(Produti_item)
+                ...
+
 
             
