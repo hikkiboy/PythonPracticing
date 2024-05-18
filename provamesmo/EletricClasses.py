@@ -17,7 +17,7 @@ class ProdutoEletronico():
         else:
             print("não ta rolando legal amigo")
     def Retirar(self,valor):
-        if valor > 0 and valor < 10 and self.estoque < 10:
+        if valor > 0 and valor <= 10 and self.estoque < 10 and (self.estoque + valor) < 10:
             self.estoque = self.estoque - valor
         else:
             print("não ta rolando legal")
