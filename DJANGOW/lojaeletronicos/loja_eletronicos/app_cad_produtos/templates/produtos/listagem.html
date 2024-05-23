@@ -1,0 +1,23 @@
+{% extends 'produtos/base.html' %}
+{% block conteudo %}
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>id</th>
+            <th>descrição</th>
+            <th>marca</th>
+            <th>valor</th>
+            <th>estoque</th>
+        </tr>
+        {% for produto in Produtos %}
+        <tr>
+            <td>{{produto.id_produtoeletronico}}</td>
+            <td>{{produto.descricao}}</td>
+            <td>{{produto.marca}}</td>
+            <td>{{produto.valor}}</td>
+            <td>{{produto.estoque}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

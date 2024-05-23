@@ -1,0 +1,75 @@
+{% extends 'produtos/base.html' %}
+{% block conteudo%}
+<style>
+    body {
+        background-color: #dddddd; 
+        margin-bottom: 100px; 
+    }
+
+
+    .navbar {
+        background-color: #ff99cc !important;
+    }
+
+
+    .container {
+        background-color: #fff; 
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+
+    h1 {
+        color: purple; 
+        margin-bottom: 20px;
+    }
+
+
+    input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+
+    button {
+        background-color: purple; 
+        color: #fff; 
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+
+    button:hover {
+        background-color: rebeccapurple; 
+    }
+
+</style>
+
+<form action="{% url 'listagem' %}" method="post">
+    {% csrf_token %}
+    <div style="text-align: center;" class="container">
+        <h1>Cadastro de Produtos</h1>
+    <div style="margin-top: 10px;">
+        Descrição <input  class="form-control-sm" type="text" name="descricao">
+    </div>
+    <div style="margin-top: 10px;">
+        Marca <input class="form-control-sm" type="text" name="marca">
+    </div>
+    <div style="margin-top: 10px;">
+        Valor <input class="form-control-sm" type="text" name="valor">
+    </div>
+    <div style="margin-top: 10px;">
+        Estoque <input class="form-control-sm" type="text" name="estoque">
+    </div>
+    <div style="margin-top: 10px;">
+        <button>Enviar</button>
+    </div>
+    </div>
+</form>
+{% endblock %}

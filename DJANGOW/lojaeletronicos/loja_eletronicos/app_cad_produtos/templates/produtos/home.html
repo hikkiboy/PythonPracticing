@@ -1,0 +1,26 @@
+{% extends 'produtos/base.html' %}
+{% block conteudo%}
+<style>
+    body {
+        background-color: #dddddd; /* cinza claro */
+        margin-bottom: 100px; /* Para o footer não sobrepor o conteúdo */
+    }
+.btn {
+  background-color: #ddd;
+  border: none;
+  color: black;
+  padding: 16px 32px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: rebeccapurple;
+  color: white;
+}
+</style>
+<a class="btn" href="cadastrar"><h1>Cadastrar</h1></a>
+{% endblock %}
