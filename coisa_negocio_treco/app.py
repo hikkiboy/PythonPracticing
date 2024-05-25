@@ -1,3 +1,8 @@
+import os
+from selenium import webdriver
+
+
+os.system('cls')
 through = False
 def Menu():
     through = True
